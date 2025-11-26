@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clasificador de Obesidad</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Evalúa tu nivel de obesidad</h1>
+        <form method="POST" class="row g-3">
+            <h3 class="col-12">Datos personales y hábitos</h3>
+            {% for field, vals in options.items() %}
+            <div class="col-md-6">
+                <label for="{{ field }}" class="form-label">{{ field.replace('_', ' ').title() }}</label>
+                <select name="{{ field }}" id="{{ field }}" class="form-select" required>
+                    {% for val in vals %}
+                    <option value="{{ val }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            {% endfor %}
+            
+            <h3 class="col-12 mt-4">Mediciones físicas</h3>
+            <div class="col-md-3">
+                <label for="Age" class="form-label">Edad (años)</label>
+                <input type="number" name="Age" id="Age" class="form-control" min="14" max="61" value="25" required>
+            </div>
+            <div class="col-md-3">
+                <label for="Height" class="form-label">Altura (metros)</label>
+                <input type="number" step="0.01" name="Height" id="Height" class="form-control" min="1.4" max="2.0" value="1.70" required>
+            </div>
+            <div class="col-md-3">
+                <label for="Weight" class="form-label">Peso (kg)</label>
+                <input type="number" name="Weight" id="Weight" class="form-control" min="30" max="170" value="70" required>
+            </div>
+            <div class="col-md-3">
+                <label for="FCVC" class="form-label">Verduras al día (1-3)</label>
+                <input type="number" step="0.1" name="FCVC" id="FCVC" class="form-control" min="0" max="3" value="2.0" required>
+            </div>
+            <div class="col-md-3">
+                <label for="NCP" class="form-label">Comidas al día (1-4)</label>
+                <input type="number" step="0.1" name="NCP" id="NCP" class="form-control" min="1" max="4" value="3.0" required>
+            </div>
+            <div class="col-md-3">
+                <label for="CH2O" class="form-label">Agua al día (1-3)</label>
+                <input type="number" step="0.1" name="CH2O" id="CH2O" class="form-control" min="1" max="3" value="2.0" required>
+            </div>
+            <div class="col-md-3">
+                <label for="FAF" class="form-label">Actividad física (0-3)</label>
+                <input type="number" step="0.1" name="FAF" id="FAF" class="form-control" min="0" max="3" value="1.0" required>
+            </div>
+            <div class="col-md-3">
+                <label for="TUE" class="form-label">Tiempo en pantalla (0-2)</label>
+                <input type="number" step="0.1" name="TUE" id="TUE" class="form-control" min="0" max="2" value="1.0" required>
+            </div>
+            
+            <div class="col-12 text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Predecir nivel de obesidad</button>
+            </div>
+        </form>
+        
+        {% if prediction %}
+        <div class="alert alert-info mt-4 text-center">
+            <h2>Tu nivel estimado: {{ prediction }}</h2>
+            <p>Recomendación: Consulta a un profesional para hábitos personalizados.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
