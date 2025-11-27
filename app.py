@@ -1,7 +1,3 @@
-from utils import db_connect
-engine = db_connect()
-
-import os
 from flask import Flask, render_template, request
 import joblib
 import numpy as np
@@ -30,9 +26,22 @@ options = {
     "MTRANS": ["Automobile", "Bike", "Motorbike", "Public_Transportation", "Walking"]
 }
 
+labels = {
+    "Gender": "Género",
+    "family_history_with_overweight": "Antecedentes familiares de sobrepeso",
+    "FAVC": "Consumo frecuente de alimentos calóricos",
+    "CAEC": "Picoteo entre comidas",
+    "SMOKE": "¿Fumas?",
+    "SCC": "Control de calorías",
+    "CALC": "Consumo de alcohol",
+    "MTRANS": "Medio de transporte habitual"
+}
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     prediction = None
+
     if request.method == 'POST':
         # Recoger datos del form
         features = {}
@@ -67,6 +76,7 @@ def index():
             'MTRANS'
         ]
 
+        # Crear Dataframe
         df_input = pd.DataFrame([[features[col] for col in feature_order]], columns=feature_order)
         df_input[num_features] = scaler.transform(df_input[num_features])
 
@@ -79,4 +89,7 @@ def index():
         prediction = le_dict['NObeyesdad'].inverse_transform([pred])[0]
         print("Decoded label:", prediction)
     
-    return render_template('index.html', options=options, prediction=prediction)
+    return render_template('index.html', options=options, labels= labels, prediction=prediction)
+
+if __name__ == '__main__':
+    app.run(debug=True)
